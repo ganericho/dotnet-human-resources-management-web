@@ -19,15 +19,15 @@ namespace api.Repositories
 
                 return new RepositoryHandler<Department>()
                 {
-                    Result = result
+                    Data = result
                 };
             }
             catch(Exception ex)
             {
                 return new RepositoryHandler<Department>()
                 {
-                    IsFailed = true,
-                    Exception = ex.Message
+                    IsFailedOrEmpty = true,
+                    Exception = ex
                 };
             }
         }
@@ -40,15 +40,15 @@ namespace api.Repositories
 
                 return new RepositoryHandler<Department>()
                 {
-                    Result = result
+                    Data = result
                 };
             }
             catch (Exception ex)
             {
                 return new RepositoryHandler<Department>()
                 {
-                    IsFailed = true,
-                    Exception = ex.Message
+                    IsFailedOrEmpty = true,
+                    Exception = ex
                 };
             }
         }

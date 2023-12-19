@@ -19,15 +19,15 @@ public class RoleRepository : GeneralRepository<Role>, IRoleRepository
 
             return new RepositoryHandler<Role>()
             {
-                Result = result
+                Data = result
             };
         }
         catch(Exception ex)
         {
             return new RepositoryHandler<Role>()
             {
-                IsFailed = true,
-                Exception = ex.Message
+                IsFailedOrEmpty = true,
+                Exception = ex
             };
         }
     }

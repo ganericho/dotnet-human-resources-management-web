@@ -19,15 +19,15 @@ public class JobRepository : GeneralRepository<Job>, IJobRepository
 
             return new RepositoryHandler<Job>()
             {
-                Result = result
+                Data = result
             };
         }
         catch(Exception ex)
         {
             return new RepositoryHandler<Job>()
             {
-                IsFailed = true,
-                Exception = ex.Message
+                IsFailedOrEmpty = true,
+                Exception = ex
             };
         }
     }
@@ -40,15 +40,15 @@ public class JobRepository : GeneralRepository<Job>, IJobRepository
 
             return new RepositoryHandler<Job>()
             {
-                Result = result
+                Data = result
             };
         }
         catch (Exception ex)
         {
             return new RepositoryHandler<Job>()
             {
-                IsFailed = true,
-                Exception = ex.Message
+                IsFailedOrEmpty = true,
+                Exception = ex
             };
         }
     }

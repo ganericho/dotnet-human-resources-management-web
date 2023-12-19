@@ -2,7 +2,8 @@
 
 public class RepositoryHandler<T>
 {
-    public bool IsFailed { get; set; } = false;
-    public string? Exception { get; set; } = MessageCollection.NoException;
-    public T? Result { get; set; }
+    public bool IsFailedOrEmpty { get; set; } = false;
+    public RepositoryStatus Status { get; set; } = RepositoryStatus.SUCCESS;
+    public Exception? Exception { get; set; }
+    public T? Data { get; set; }
 }

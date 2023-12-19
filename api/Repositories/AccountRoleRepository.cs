@@ -19,16 +19,16 @@ public class AccountRoleRepository : GeneralRepository<AccountRole>, IAccountRol
 
             return new RepositoryHandler<IEnumerable<AccountRole>>()
             {
-                Result = result
+                Data = result
             };
         }
         catch(Exception ex)
         {
             return new RepositoryHandler<IEnumerable<AccountRole>>()
             {
-                IsFailed = true,
-                Exception = ex.Message,
-                Result = Enumerable.Empty<AccountRole>()
+                IsFailedOrEmpty = true,
+                Exception = ex,
+                Data = Enumerable.Empty<AccountRole>()
             };
         }
     }

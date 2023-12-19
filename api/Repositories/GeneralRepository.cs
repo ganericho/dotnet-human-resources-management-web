@@ -19,21 +19,16 @@ public class GeneralRepository<T> : IGeneralRepository<T> where T : class
         try
         {
             context.Set<T>().Add(entity);
-
             context.SaveChanges();
 
-            return new RepositoryHandler<string>()
-            {
-                Result = MessageCollection.DataCreated
-            };
+            return new RepositoryHandler<string>();
         }
         catch (Exception ex)
         {
             return new RepositoryHandler<string>()
             {
-                IsFailed = true,
-                Exception = ex.Message,
-                Result = MessageCollection.DataCreated
+                Status = RepositoryStatus.ERROR,
+                Exception = ex
             };
         }
     }
@@ -45,18 +40,14 @@ public class GeneralRepository<T> : IGeneralRepository<T> where T : class
             context.Set<T>().Remove(entity);
             context.SaveChanges();
 
-            return new RepositoryHandler<string>()
-            {
-                Result = MessageCollection.DataDeleted
-            };
+            return new RepositoryHandler<string>();
         }
         catch (Exception ex)
         {
             return new RepositoryHandler<string>()
             {
-                IsFailed = true,
-                Exception = ex.Message,
-                Result = MessageCollection.NoResult
+                Status = RepositoryStatus.ERROR,
+                Exception = ex
             };
         }
     }
@@ -65,20 +56,28 @@ public class GeneralRepository<T> : IGeneralRepository<T> where T : class
     {
         try
         {
-            var result = context.Set<T>().ToList();
+            var getAll = context.Set<T>().ToList();
 
-            return new RepositoryHandler<IEnumerable<T>>()
+            var result = new RepositoryHandler<IEnumerable<T>>();
+
+            if (!getAll.Any())
             {
-                Result = result
-            };
+                result.Status = RepositoryStatus.NOT_FOUND;
+                result.Exception = new Exception($"{typeof(T).Name}s is empty");
+
+                return result;
+            }
+
+            result.Data = getAll;
+
+            return result;
         }
         catch (Exception ex)
         {
             return new RepositoryHandler<IEnumerable<T>>()
             {
-                IsFailed = true,
-                Exception = ex.Message,
-                Result = Enumerable.Empty<T>()
+                Status = RepositoryStatus.ERROR,
+                Exception = ex
             };
         }
     }
@@ -87,19 +86,26 @@ public class GeneralRepository<T> : IGeneralRepository<T> where T : class
     {
         try
         {
-            T? result = context.Set<T>().Find(guid);
+            T? getData = context.Set<T>().Find(guid);
 
-            return new RepositoryHandler<T>()
+            var result = new RepositoryHandler<T>();
+
+            if(getData is null)
             {
-                Result = result
-            };
+                result.Status = RepositoryStatus.NOT_FOUND;
+                return result;
+            }
+
+            result.Data = getData;
+
+            return result;
         }
         catch (Exception ex)
         {
             return new RepositoryHandler<T>()
             {
-                IsFailed = true,
-                Exception = ex.Message
+                Status = RepositoryStatus.ERROR,
+                Exception = ex
             };
         }
     }
@@ -111,18 +117,14 @@ public class GeneralRepository<T> : IGeneralRepository<T> where T : class
             context.Set<T>().Update(entity);
             context.SaveChanges();
 
-            return new RepositoryHandler<string>()
-            {
-                Result = MessageCollection.DataUpdated
-            };
+            return new RepositoryHandler<string>();
         }
         catch (Exception ex)
         {
             return new RepositoryHandler<string>()
             {
-                IsFailed = true,
-                Exception = ex.Message,
-                Result = MessageCollection.NoResult
+                Status = RepositoryStatus.ERROR,
+                Exception = ex
             };
         }
     }

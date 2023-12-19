@@ -19,16 +19,16 @@ public class EmployeeRepository : GeneralRepository<Employee>, IEmployeeReposito
 
             return new RepositoryHandler<IEnumerable<Employee>>()
             {
-                Result = result
+                Data = result
             };
         }
         catch (Exception ex)
         {
             return new RepositoryHandler<IEnumerable<Employee>>()
             {
-                IsFailed = true,
-                Exception = ex.Message,
-                Result = Enumerable.Empty<Employee>()
+                IsFailedOrEmpty = true,
+                Exception = ex,
+                Data = Enumerable.Empty<Employee>()
             };
         }
     }
@@ -37,20 +37,26 @@ public class EmployeeRepository : GeneralRepository<Employee>, IEmployeeReposito
     {
         try
         {
-            var result = base.context.Set<Employee>().Where(employee => employee.JobGuid == jobGuid);
+            var getData = base.context.Set<Employee>().Where(employee => employee.JobGuid == jobGuid);
 
-            return new RepositoryHandler<IEnumerable<Employee>>()
+            var result = new RepositoryHandler<IEnumerable<Employee>>();
+
+            if (!getData.Any())
             {
-                Result = result
-            };
+                result.Status = RepositoryStatus.NOT_FOUND;
+            }
+
+            result.Data = getData;
+
+            return result;
+            
         }
         catch (Exception ex)
         {
             return new RepositoryHandler<IEnumerable<Employee>>()
             {
-                IsFailed = true,
-                Exception = ex.Message,
-                Result = Enumerable.Empty<Employee>()
+                Status = RepositoryStatus.ERROR,
+                Exception = ex
             };
         }
     }

@@ -19,16 +19,16 @@ public class JobHistoryRepository : GeneralRepository<JobHistory>, IJobHistoryRe
 
             return new RepositoryHandler<IEnumerable<JobHistory>>()
             {
-                Result = result
+                Data = result
             };
         }
         catch(Exception ex)
         {
             return new RepositoryHandler<IEnumerable<JobHistory>>()
             {
-                IsFailed = true,
-                Exception = ex.Message,
-                Result = Enumerable.Empty<JobHistory>()
+                IsFailedOrEmpty = true,
+                Exception = ex,
+                Data = Enumerable.Empty<JobHistory>()
             };
         }
     }

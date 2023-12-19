@@ -19,15 +19,15 @@ public class AccountRepository : GeneralRepository<Account>, IAccountRepository
             
             return new RepositoryHandler<Account>()
             {
-                Result = result
+                Data = result
             };
         }
         catch(Exception ex)
         {
             return new RepositoryHandler<Account>()
             {
-                IsFailed = true,
-                Exception = ex.Message
+                IsFailedOrEmpty = true,
+                Exception = ex
             };
         }
     }
