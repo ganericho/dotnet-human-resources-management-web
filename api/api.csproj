@@ -30,6 +30,7 @@
     <Folder Include="Models\" />
     <Folder Include="Dtos\" />
     <Folder Include="Database\" />
+    <Folder Include="Contracts\" />
     <Folder Include="Repositories\" />
     <Folder Include="Utilities\" />
   </ItemGroup>
