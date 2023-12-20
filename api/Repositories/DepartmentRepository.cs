@@ -13,43 +13,59 @@ namespace api.Repositories
 
         public RepositoryHandler<Department> GetByCode(int code)
         {
+            var repository = new RepositoryHandler<Department>();
+
             try
             {
-                var result = base.context.Set<Department>().FirstOrDefault(department => department.Code == code);
+                var data = base.context.Set<Department>().FirstOrDefault(department => department.Code == code);
 
-                return new RepositoryHandler<Department>()
+                if (data is null)
                 {
-                    Data = result
-                };
+                    repository.Status = RepositoryStatus.NOT_FOUND;
+                    repository.Exception = new Exception("Department not registered.");
+
+                    return repository;
+                }
+
+                repository.Result = data;
+
+                return repository;
             }
             catch(Exception ex)
             {
-                return new RepositoryHandler<Department>()
-                {
-                    IsFailedOrEmpty = true,
-                    Exception = ex
-                };
+                repository.Status = RepositoryStatus.ERROR;
+                repository.Exception = ex;
+
+                return repository;
             }
         }
 
         public RepositoryHandler<Department> GetByName(string name)
         {
+            var repository = new RepositoryHandler<Department>();
+
             try
             {
-                var result = base.context.Set<Department>().FirstOrDefault(department => department.Name.ToLower() == name.ToLower());
+                var data = base.context.Set<Department>().FirstOrDefault(department => department.Name.ToLower() == name.ToLower());
 
-                return new RepositoryHandler<Department>()
+                if (data is null)
                 {
-                    Data = result
-                };
+                    repository.Status = RepositoryStatus.NOT_FOUND;
+                    repository.Exception = new Exception("Department not registered.");
+
+                    return repository;
+                }
+
+                repository.Result = data;
+
+                return repository;
             }
             catch (Exception ex)
             {
-                return new RepositoryHandler<Department>()
-                {
-                    IsFailedOrEmpty = true,
-                    Exception = ex
-                };
+                repository.Status = RepositoryStatus.ERROR;
+                repository.Exception = ex;
+
+                return repository;
             }
         }
     }

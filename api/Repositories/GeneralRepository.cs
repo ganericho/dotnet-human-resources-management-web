@@ -68,7 +68,7 @@ public class GeneralRepository<T> : IGeneralRepository<T> where T : class
                 return result;
             }
 
-            result.Data = getAll;
+            result.Result = getAll;
 
             return result;
         }
@@ -96,7 +96,7 @@ public class GeneralRepository<T> : IGeneralRepository<T> where T : class
                 return result;
             }
 
-            result.Data = getData;
+            result.Result = getData;
 
             return result;
         }

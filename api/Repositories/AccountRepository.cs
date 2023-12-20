@@ -19,7 +19,7 @@ public class AccountRepository : GeneralRepository<Account>, IAccountRepository
             
             return new RepositoryHandler<Account>()
             {
-                Data = result
+                Result = result
             };
         }
         catch(Exception ex)

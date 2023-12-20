@@ -15,20 +15,28 @@ public class EmployeeRepository : GeneralRepository<Employee>, IEmployeeReposito
     {
         try
         {
-            var result = base.context.Set<Employee>().Where(employee => employee.DepartmentGuid == departmentGuid);
+            var getAll = base.context.Set<Employee>().Where(employee => employee.DepartmentGuid == departmentGuid);
 
-            return new RepositoryHandler<IEnumerable<Employee>>()
+            var result = new RepositoryHandler<IEnumerable<Employee>>();
+
+            if (!getAll.Any())
             {
-                Data = result
-            };
+                result.Status = RepositoryStatus.NOT_FOUND;
+                result.Exception = new Exception("Employees is empty");
+
+                return result;
+            }
+
+            result.Result = getAll;
+
+            return result;
         }
         catch (Exception ex)
         {
             return new RepositoryHandler<IEnumerable<Employee>>()
             {
-                IsFailedOrEmpty = true,
-                Exception = ex,
-                Data = Enumerable.Empty<Employee>()
+                Status = RepositoryStatus.ERROR,
+                Exception = ex
             };
         }
     }
@@ -46,7 +54,7 @@ public class EmployeeRepository : GeneralRepository<Employee>, IEmployeeReposito
                 result.Status = RepositoryStatus.NOT_FOUND;
             }
 
-            result.Data = getData;
+            result.Result = getData;
 
             return result;
             

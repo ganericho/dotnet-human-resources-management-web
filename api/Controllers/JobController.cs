@@ -39,15 +39,13 @@ public class JobController : ControllerBase
             }
 
             // Convert repository result to dto format
-            IEnumerable<JobDto> jobDto = getJobs.Data.Select(job => (JobDto) job);
+            IEnumerable<JobDto> jobDto = getJobs.Result.Select(job => (JobDto) job);
 
-            return Ok(ResponseOkHandler.Success(jobDto));
+            return Ok(OkResponseHandler.Success(jobDto));
         }
         catch(Exception ex)
         {
-
-
-            return StatusCode(StatusCodes.Status500InternalServerError, ResponseErrorHandler.InternalServerError(ex.Message));
+            return StatusCode(StatusCodes.Status500InternalServerError, ErrorResponseHandler.InternalServerError(ex.Message));
         }
     }
 
@@ -66,11 +64,11 @@ public class JobController : ControllerBase
 
             if(getJob.Status == RepositoryStatus.NOT_FOUND)
             {
-                return NotFound(ResponseErrorHandler.NotFound("Job with specified ID not found."));
+                return NotFound(ErrorResponseHandler.NotFound("Job with specified ID not found."));
             }
 
             // Create Job Detail Dto
-            JobDetailDto jobDetailDto = (JobDetailDto) getJob.Data;
+            JobDetailDto jobDetailDto = (JobDetailDto) getJob.Result;
 
             // Get a list of employees with related jobs.
             var getEmployees = employeeRepository.GetByJob(guid);
@@ -84,7 +82,7 @@ public class JobController : ControllerBase
             {
                 jobDetailDto.Employees = Enumerable.Empty<JobEmployeeDto>();
                 
-                return Ok(ResponseOkHandler.Success(jobDetailDto));
+                return Ok(OkResponseHandler.Success(jobDetailDto));
             }
 
             // Get Accounts and Departments
@@ -103,9 +101,9 @@ public class JobController : ControllerBase
             }
 
             // Create Data For Job Employees
-            jobDetailDto.Employees = from employee in getEmployees.Data
-                                     join account in getAccounts.Data on employee.Guid equals account.Guid
-                                     join department in getDepartments.Data on employee.DepartmentGuid equals department.Guid
+            jobDetailDto.Employees = from employee in getEmployees.Result
+                                     join account in getAccounts.Result on employee.Guid equals account.Guid
+                                     join department in getDepartments.Result on employee.DepartmentGuid equals department.Guid
                                      select new JobEmployeeDto
                                      {
                                          Guid = employee.Guid,
@@ -121,11 +119,11 @@ public class JobController : ControllerBase
 
 
             // Success Response with employees 
-            return Ok(ResponseOkHandler.Success(jobDetailDto));
+            return Ok(OkResponseHandler.Success(jobDetailDto));
         }
         catch(Exception ex)
         {
-            return StatusCode(StatusCodes.Status500InternalServerError, ResponseErrorHandler.InternalServerError(ex.Message));
+            return StatusCode(StatusCodes.Status500InternalServerError, ErrorResponseHandler.InternalServerError(ex.Message));
         }
     }
 
@@ -144,22 +142,22 @@ public class JobController : ControllerBase
 
             if(getJob.Status == RepositoryStatus.NOT_FOUND)
             {
-                return NotFound(ResponseErrorHandler.NotFound("Job with specified ID not found."));
+                return NotFound(ErrorResponseHandler.NotFound("Job with specified ID not found."));
             }
 
             // Delete Job
-            var deleteJob = jobRepository.Delete(getJob.Data);
+            var deleteJob = jobRepository.Delete(getJob.Result);
 
             if(deleteJob.Status == RepositoryStatus.ERROR)
             {
                 throw deleteJob.Exception;
             }
 
-            return Ok(ResponseOkHandler.DeleteSuccess());
+            return Ok(OkResponseHandler.DeleteSuccess());
         }
         catch(Exception ex)
         {
-            return StatusCode(StatusCodes.Status500InternalServerError, ResponseErrorHandler.InternalServerError(ex.Message));
+            return StatusCode(StatusCodes.Status500InternalServerError, ErrorResponseHandler.InternalServerError(ex.Message));
         }
     }
 
@@ -177,7 +175,7 @@ public class JobController : ControllerBase
             }
 
             // Return success response
-            return Ok(ResponseOkHandler.CreateSuccess());
+            return Ok(OkResponseHandler.CreateSuccess());
         }
         catch(Exception ex)
         {
@@ -193,7 +191,7 @@ public class JobController : ControllerBase
                 return Conflict();
             }
 
-            return StatusCode(StatusCodes.Status500InternalServerError, ResponseErrorHandler.InternalServerError(ex.Message));
+            return StatusCode(StatusCodes.Status500InternalServerError, ErrorResponseHandler.InternalServerError(ex.Message));
         }
     }
 
@@ -212,11 +210,11 @@ public class JobController : ControllerBase
 
             if(getJob.Status == RepositoryStatus.NOT_FOUND)
             {
-                return NotFound(ResponseErrorHandler.NotFound("Job with specified ID not found."));
+                return NotFound(ErrorResponseHandler.NotFound("Job with specified ID not found."));
             }
 
             // Update job
-            var job = getJob.Data;
+            var job = getJob.Result;
             job.ModifiedDate = DateTime.Now;
             job.Code = jobDto.Code;
             job.Name = jobDto.Name;
@@ -231,7 +229,7 @@ public class JobController : ControllerBase
             }
 
             // Success Response
-            return Ok(ResponseOkHandler.UpdateSuccess());
+            return Ok(OkResponseHandler.UpdateSuccess());
         }
         catch(Exception ex)
         {
@@ -239,15 +237,15 @@ public class JobController : ControllerBase
 
             if (innerException.Contains("code"))
             {
-                return Conflict();
+                return Conflict(ErrorResponseHandler.Conflict("Job code already registered."));
             }
 
             if (innerException.Contains("name"))
             {
-                return Conflict();
+                return Conflict(ErrorResponseHandler.Conflict("Job name already registered."));
             }
 
-            return StatusCode(StatusCodes.Status500InternalServerError, ResponseErrorHandler.InternalServerError(ex.Message));
+            return StatusCode(StatusCodes.Status500InternalServerError, ErrorResponseHandler.InternalServerError(ex.Message));
         }
     }
 }

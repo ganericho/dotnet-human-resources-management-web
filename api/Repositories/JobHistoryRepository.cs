@@ -19,7 +19,7 @@ public class JobHistoryRepository : GeneralRepository<JobHistory>, IJobHistoryRe
 
             return new RepositoryHandler<IEnumerable<JobHistory>>()
             {
-                Data = result
+                Result = result
             };
         }
         catch(Exception ex)
@@ -28,7 +28,7 @@ public class JobHistoryRepository : GeneralRepository<JobHistory>, IJobHistoryRe
             {
                 IsFailedOrEmpty = true,
                 Exception = ex,
-                Data = Enumerable.Empty<JobHistory>()
+                Result = Enumerable.Empty<JobHistory>()
             };
         }
     }
