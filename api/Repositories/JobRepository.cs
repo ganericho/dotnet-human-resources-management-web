@@ -13,43 +13,60 @@ public class JobRepository : GeneralRepository<Job>, IJobRepository
 
     public RepositoryHandler<Job> GetByCode(int code)
     {
+        var repository = new RepositoryHandler<Job>();
+
         try
         {
-            var result = base.context.Set<Job>().FirstOrDefault(job => job.Code == code);
+            var data = base.context.Set<Job>().FirstOrDefault(job => job.Code == code);
 
-            return new RepositoryHandler<Job>()
+            if(data is null)
             {
-                Data = result
-            };
+                repository.Status = RepositoryStatus.NOT_FOUND;
+                repository.Exception = new Exception("Job not registered.");
+
+                return repository;
+            }
+
+            repository.Result = data;
+
+            return repository;
         }
         catch(Exception ex)
         {
-            return new RepositoryHandler<Job>()
-            {
-                IsFailedOrEmpty = true,
-                Exception = ex
-            };
+            repository.Status = RepositoryStatus.ERROR;
+            repository.Exception = ex;
+
+            return repository;
         }
     }
 
     public RepositoryHandler<Job> GetByName(string name)
     {
+        var repository = new RepositoryHandler<Job>();
+
         try
         {
-            var result = base.context.Set<Job>().FirstOrDefault(job => job.Name.ToLower() == name.ToLower());
+            var data = base.context.Set<Job>().FirstOrDefault(job => job.Name.ToLower() == name.ToLower());
 
-            return new RepositoryHandler<Job>()
+
+            if(data is null)
             {
-                Data = result
-            };
+                repository.Status = RepositoryStatus.NOT_FOUND;
+                repository.Exception = new Exception("Job not registered.");
+
+                return repository;
+            }
+
+            repository.Result = data;
+
+            return repository;
         }
         catch (Exception ex)
         {
-            return new RepositoryHandler<Job>()
-            {
-                IsFailedOrEmpty = true,
-                Exception = ex
-            };
+            repository.Status = RepositoryStatus.ERROR;
+            repository.Exception = ex;
+
+            return repository;
         }
     }
 }

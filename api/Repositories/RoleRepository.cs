@@ -13,22 +13,30 @@ public class RoleRepository : GeneralRepository<Role>, IRoleRepository
 
     public RepositoryHandler<Role> GetByName(string name)
     {
+        var repository = new RepositoryHandler<Role>();
+
         try
         {
-            var result = base.context.Set<Role>().FirstOrDefault(role => role.Name.ToLower() == name.ToLower());
+            var data = base.context.Set<Role>().FirstOrDefault(role => role.Name.ToLower() == name.ToLower());
 
-            return new RepositoryHandler<Role>()
+            if (data is null)
             {
-                Data = result
-            };
+                repository.Status = RepositoryStatus.NOT_FOUND;
+                repository.Exception = new Exception("Role not available.");
+
+                return repository;
+            }
+
+            repository.Result = data;
+
+            return repository;
         }
         catch(Exception ex)
         {
-            return new RepositoryHandler<Role>()
-            {
-                IsFailedOrEmpty = true,
-                Exception = ex
-            };
+            repository.Status = RepositoryStatus.ERROR;
+            repository.Exception = ex;
+
+            return repository;
         }
     }
 }

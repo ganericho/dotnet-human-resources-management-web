@@ -2,47 +2,47 @@
 
 namespace api.Utilities.Handlers;
 
-public class ResponseOkHandler
+public class OkResponseHandler
 {
     public int Code { get; set; } = StatusCodes.Status200OK;
     public string Status { get; set; } = HttpStatusCode.OK.ToString();
     public string Message { get; set; } = ResponseMessages.SuccessRetrieveData;
     public object? Data { get; set; } = ResponseMessages.Empty;
 
-    public ResponseOkHandler() { }
+    public OkResponseHandler() { }
 
-    public static ResponseOkHandler Success(object data)
+    public static OkResponseHandler Success(object data)
     {
-        return new ResponseOkHandler
+        return new OkResponseHandler
         {
             Data = data
         };
     }
 
-    public static ResponseOkHandler Success()
+    public static OkResponseHandler Success()
     {
-        return new ResponseOkHandler();
+        return new OkResponseHandler();
     }
 
-    public static ResponseOkHandler CreateSuccess()
+    public static OkResponseHandler CreateSuccess()
     {
-        return new ResponseOkHandler()
+        return new OkResponseHandler()
         {
             Message = ResponseMessages.DataCreatedSuccessfully
         };
     }
 
-    public static ResponseOkHandler DeleteSuccess()
+    public static OkResponseHandler DeleteSuccess()
     {
-        return new ResponseOkHandler()
+        return new OkResponseHandler()
         {
             Status = ResponseMessages.DataDeletedSuccessfully
         };
     }
 
-    public static ResponseOkHandler UpdateSuccess()
+    public static OkResponseHandler UpdateSuccess()
     {
-        return new ResponseOkHandler()
+        return new OkResponseHandler()
         {
             Status = ResponseMessages.DataUpdatedSuccessfully
         };
