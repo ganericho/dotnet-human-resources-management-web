@@ -8,7 +8,7 @@ public class CreateJobHistoryDto
 {
     public Guid EmployeeGuid { get; set; }
 
-    public Guid JobGuid { get; set; }
+    public int JobCode { get; set; }
 
     public DateTime StartDate { get; set; }
 
@@ -22,7 +22,6 @@ public class CreateJobHistoryDto
             CreatedDate = DateTime.Now,
             ModifiedDate = DateTime.Now,
             EmployeeGuid = dto.EmployeeGuid,
-            JobGuid = dto.JobGuid,
             StartDate = dto.StartDate,
             EndDate = dto.EndDate
         };

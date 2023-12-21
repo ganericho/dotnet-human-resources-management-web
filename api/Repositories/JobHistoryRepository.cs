@@ -13,23 +13,30 @@ public class JobHistoryRepository : GeneralRepository<JobHistory>, IJobHistoryRe
 
     public RepositoryHandler<IEnumerable<JobHistory>> GetByEmployeeGuid(Guid employeeGuid)
     {
+        var repository = new RepositoryHandler<IEnumerable<JobHistory>>();
+
         try
         {
-            var result = base.context.Set<JobHistory>().Where(jobHistory => jobHistory.EmployeeGuid == employeeGuid);
+            var data = base.context.Set<JobHistory>().Where(jobHistory => jobHistory.EmployeeGuid == employeeGuid);
 
-            return new RepositoryHandler<IEnumerable<JobHistory>>()
+            if (!data.Any())
             {
-                Result = result
-            };
+                repository.Status = RepositoryStatus.NOT_FOUND;
+                repository.Exception = new Exception("Job history not found.");
+
+                return repository;
+            }
+
+            repository.Result = data;
+
+            return repository;
         }
         catch(Exception ex)
         {
-            return new RepositoryHandler<IEnumerable<JobHistory>>()
-            {
-                IsFailedOrEmpty = true,
-                Exception = ex,
-                Result = Enumerable.Empty<JobHistory>()
-            };
+            repository.Status = RepositoryStatus.ERROR;
+            repository.Exception = ex;
+
+            return repository;
         }
     }
 }

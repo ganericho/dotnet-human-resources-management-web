@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using api.Models;
 
-namespace api.Dtos.EmployeeData;
+namespace api.Dtos.EmployeeDtos;
 
 public class JobHistoryDto
 {

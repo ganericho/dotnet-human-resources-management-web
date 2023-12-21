@@ -346,5 +346,118 @@ public class EmployeeController : ControllerBase
             return StatusCode(StatusCodes.Status500InternalServerError, ErrorResponseHandler.InternalServerError(ex.Message));
         }
     }
-  
+
+    [HttpPut]
+    public IActionResult UpdateEmployee(UpdateEmployeeDto updateData)
+    {
+        using var transaction = context.Database.BeginTransaction();
+
+        try
+        {
+            // Get employee data from repository.
+            var getEmployee = employeeRepository.GetByGuid(updateData.Guid);
+
+            if (getEmployee.Status == RepositoryStatus.ERROR)
+            {
+                throw getEmployee.Exception;
+            }
+
+            if (getEmployee.Status == RepositoryStatus.NOT_FOUND)
+            {
+                return NotFound(ErrorResponseHandler.NotFound("Employee with specified ID not found."));
+            }
+
+            // Get department, job, and role data from repository.
+            var getDepartment = departmentRepository.GetByCode(updateData.DepartmentCode);
+
+            if(getDepartment.Status != RepositoryStatus.SUCCESS)
+            {
+                throw getDepartment.Exception;
+            }
+
+            var getJob = jobRepository.GetByCode(updateData.JobCode);
+
+            if (getJob.Status != RepositoryStatus.SUCCESS)
+            {
+                throw getJob.Exception;
+            }
+
+            var getRole = roleRepository.GetByName(updateData.Role);
+
+            if (getRole.Status != RepositoryStatus.SUCCESS)
+            {
+                throw getRole.Exception;
+            }
+
+            // Update employee data.
+            var employee = getEmployee.Result;
+
+            employee.ModifiedDate = DateTime.Now;
+            employee.BirthDate = updateData.BirthDate;
+            employee.HiringDate = updateData.HiringDate;
+            employee.FirstName = updateData.FirstName;
+            employee.LastName = updateData.LastName;
+            employee.JobGuid = getJob.Result.Guid;
+            employee.DepartmentGuid = getDepartment.Result.Guid;
+            employee.PhoneNumber = updateData.PhoneNumber;
+            employee.Gender = updateData.Gender;
+
+            var updateEmployee = employeeRepository.Update(employee);
+
+            if (updateEmployee.Status != RepositoryStatus.SUCCESS)
+            {
+                throw updateEmployee.Exception;
+            }
+
+            // Update employee account data.
+            var getAccount = accountRepository.GetByGuid(employee.Guid);
+
+            if (getAccount.Status != RepositoryStatus.SUCCESS)
+            {
+                throw getAccount.Exception;
+            }
+
+            var account = getAccount.Result;
+            
+            if (account.Email == updateData.Email)
+            {
+                transaction.Commit();
+
+                return Ok(OkResponseHandler.UpdateSuccess());
+            }
+            
+            account.Email = updateData.Email;
+
+            var updateAccount = accountRepository.Update(account);
+
+            if (updateAccount.Status != RepositoryStatus.SUCCESS)
+            {
+                throw updateAccount.Exception;
+            }
+
+            // Commit changes.
+            transaction.Commit();
+
+            // Success response.
+            return Ok(OkResponseHandler.UpdateSuccess());
+        }
+        catch(Exception ex)
+        {
+            context.Database.RollbackTransaction();
+
+            var exceptionMessage = ExceptionHandler.GetMessage(ex);
+
+            if (exceptionMessage.Contains("email"))
+            {
+                return Conflict(ErrorResponseHandler.Conflict("Email has already registered."));
+            }
+
+            if (exceptionMessage.Contains("phone_number"))
+            {
+                return Conflict(ErrorResponseHandler.Conflict("Phone number has already registered."));
+            }
+
+            return StatusCode(StatusCodes.Status500InternalServerError, ErrorResponseHandler.InternalServerError(ex.Message));
+        }
+    }
 }

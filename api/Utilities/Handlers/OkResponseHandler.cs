@@ -36,7 +36,7 @@ public class OkResponseHandler
     {
         return new OkResponseHandler()
         {
-            Status = ResponseMessages.DataDeletedSuccessfully
+            Message = ResponseMessages.DataDeletedSuccessfully
         };
     }
 
@@ -44,7 +44,16 @@ public class OkResponseHandler
     {
         return new OkResponseHandler()
         {
-            Status = ResponseMessages.DataUpdatedSuccessfully
+            Message = ResponseMessages.DataUpdatedSuccessfully
+        };
+    }
+
+    public static OkResponseHandler Empty(string message, object data)
+    {
+        return new OkResponseHandler
+        {
+            Message = message,
+            Data = data
         };
     }
 }
