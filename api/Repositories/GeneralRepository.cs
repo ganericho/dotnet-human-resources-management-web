@@ -93,6 +93,7 @@ public class GeneralRepository<T> : IGeneralRepository<T> where T : class
             if(getData is null)
             {
                 result.Status = RepositoryStatus.NOT_FOUND;
+                result.Exception = new Exception($"{typeof(T).Name}s is not found.");
                 return result;
             }
 

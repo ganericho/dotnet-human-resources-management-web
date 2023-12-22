@@ -2,6 +2,7 @@
 using api.Database;
 using api.Dtos.EmployeeData;
 using api.Dtos.EmployeeDtos;
+using api.Repositories;
 using api.Utilities;
 using api.Utilities.Handlers;
 using Microsoft.AspNetCore.Mvc;
@@ -130,6 +131,80 @@ public class JobHistoryController : ControllerBase
         }
         catch(Exception ex)
         {
+            string exceptionMessage = ExceptionHandler.GetMessage(ex);
+
+            return StatusCode(StatusCodes.Status500InternalServerError, ErrorResponseHandler.InternalServerError(exceptionMessage));
+        }
+    }
+
+    [HttpPut]
+    public IActionResult Update(UpdateJobHistoryDto updateData)
+    {
+        var transaction = context.Database.BeginTransaction();
+        try
+        {
+            // Get job history data from repository.
+            var getJobHistory = jobHistoryRepository.GetByGuid(updateData.Guid);
+
+            if (getJobHistory.Status != RepositoryStatus.SUCCESS)
+            {
+                throw getJobHistory.Exception;
+            }
+
+            // Get job data from repository.
+            var getJob = jobRepository.GetByCode(updateData.JobCode);
+            
+            if (getJob.Status != RepositoryStatus.SUCCESS)
+            {
+                throw getJob.Exception;
+            }
+
+            // Replace job history entity attribute with update data
+            var jobHistory = getJobHistory.Result;
+            jobHistory.ModifiedDate = DateTime.Now;
+            jobHistory.JobGuid = getJob.Result.Guid;
+            jobHistory.StartDate = updateData.StartDate;
+            jobHistory.EndDate = updateData.EndDate;
+            jobHistory.IsActive = updateData.IsActive;
+
+            // Get employee job histories from repository.
+            var getEmployeeJobHistories = jobHistoryRepository.GetByEmployeeGuid(jobHistory.EmployeeGuid);
+
+            if (getEmployeeJobHistories.Status != RepositoryStatus.SUCCESS)
+            {
+                throw getEmployeeJobHistories.Exception;
+            }
+
+            var employeeJobHistories = getEmployeeJobHistories.Result;
+
+            // Set current active job history to inactive.
+            var activeJobHistory = employeeJobHistories.First(item => item.IsActive == true);
+
+            if(activeJobHistory != null)
+            {
+                activeJobHistory.IsActive = false;
+
+                var updateActiveJobHistory = jobHistoryRepository.Update(activeJobHistory);
+
+                if (updateActiveJobHistory.Status != RepositoryStatus.SUCCESS)
+                {
+                    throw updateActiveJobHistory.Exception;
+                }
+            }
+
+            // Update job history.
+            var updateJobHistory = jobHistoryRepository.Update(jobHistory);
+
+            // Commit changes.
+            transaction.Commit();
+
+            // Success response.
+            return Ok(OkResponseHandler.UpdateSuccess());
+        }
+        catch(Exception ex)
+        {
+            transaction.Rollback();
+
             string exceptionMessage = ExceptionHandler.GetMessage(ex);
 
             return StatusCode(StatusCodes.Status500InternalServerError, ErrorResponseHandler.InternalServerError(exceptionMessage));
