@@ -1,8 +1,9 @@
 ﻿namespace api.Utilities;
 
-public enum RepositoryStatus
+public enum ActionStatus
 {
     SUCCESS,
     ERROR,
-    NOT_FOUND
+    NOT_FOUND,
+    CONFLICT
 }
