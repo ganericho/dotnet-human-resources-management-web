@@ -1,4 +1,6 @@
-﻿namespace api.Dtos.DepartmentData;
+﻿using api.Utilities.Enums;
+
+namespace api.Dtos.DepartmentData;
 
 public class DepartmentEmployeeDto
 {
@@ -7,7 +9,7 @@ public class DepartmentEmployeeDto
     public string? LastName { get; set; }
     public DateTime BirthDate { get; set; }
     public DateTime HiringDate { get; set; }
-    public Gender Gender { get; set; }
+    public Sex Gender { get; set; }
     public string PhoneNumber { get; set; }
     public string Email { get; set; }
     public string Job { get; set; }

@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using api.Models;
+using api.Utilities.Enums;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace api;
@@ -18,8 +20,8 @@ public class Employee : GeneralModel
     [Required, Column("hiring_date")]
     public DateTime HiringDate { get; set; }
 
-    [Required, Column("gender")]
-    public Gender Gender { get; set; }
+    [Required, Column("sex")]
+    public Sex Sex { get; set; }
 
     [Required, Column("phone_number", TypeName = "nvarchar(50)")]
     public string PhoneNumber { get; set; }
@@ -36,4 +38,5 @@ public class Employee : GeneralModel
     public Department? DepartmentManaged { get; set; }
     public Job? Job { get; set; }
     public IEnumerable<JobHistory>? JobHistories { get; set; }
+    public IEnumerable<LeaveRecord>? LeaveRecords { get; set; }
 }

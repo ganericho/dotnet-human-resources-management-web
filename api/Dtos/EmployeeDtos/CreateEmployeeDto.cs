@@ -1,5 +1,6 @@
 ﻿using api.Models;
 using api.Utilities;
+using api.Utilities.Enums;
 
 namespace api.Dtos.EmployeeData;
 
@@ -9,7 +10,7 @@ public class CreateEmployeeDto
     public string? LastName { get; set; }
     public DateTime BirthDate { get; set; }
     public DateTime HiringDate { get; set; }
-    public Gender Gender { get; set; }
+    public Sex Sex { get; set; }
     public string PhoneNumber { get; set; }
     public string Email { get; set; }
     public string Password { get; set; }
@@ -30,7 +31,7 @@ public class CreateEmployeeDto
             LastName = createData.LastName,
             BirthDate = createData.BirthDate,
             HiringDate = createData.HiringDate,
-            Gender = createData.Gender,
+            Sex = createData.Sex,
             PhoneNumber = createData.PhoneNumber
         };
     }

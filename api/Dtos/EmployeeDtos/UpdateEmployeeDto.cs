@@ -1,5 +1,6 @@
 ﻿using api.Models;
 using api.Utilities;
+using api.Utilities.Enums;
 
 namespace api.Dtos.EmployeeData;
 
@@ -10,7 +11,7 @@ public class UpdateEmployeeDto
     public string? LastName { get; set; }
     public DateTime BirthDate { get; set; }
     public DateTime HiringDate { get; set; }
-    public Gender Gender { get; set; }
+    public Sex Gender { get; set; }
     public string PhoneNumber { get; set; }
     public string Email { get; set; }
     public int DepartmentCode { get; set; }
