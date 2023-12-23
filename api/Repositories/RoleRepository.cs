@@ -21,7 +21,7 @@ public class RoleRepository : GeneralRepository<Role>, IRoleRepository
 
             if (data is null)
             {
-                repository.Status = RepositoryStatus.NOT_FOUND;
+                repository.Status = ActionStatus.NOT_FOUND;
                 repository.Exception = new Exception("Role not available.");
 
                 return repository;
@@ -33,7 +33,7 @@ public class RoleRepository : GeneralRepository<Role>, IRoleRepository
         }
         catch(Exception ex)
         {
-            repository.Status = RepositoryStatus.ERROR;
+            repository.Status = ActionStatus.ERROR;
             repository.Exception = ex;
 
             return repository;

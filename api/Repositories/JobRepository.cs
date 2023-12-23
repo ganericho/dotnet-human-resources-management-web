@@ -21,7 +21,7 @@ public class JobRepository : GeneralRepository<Job>, IJobRepository
 
             if(data is null)
             {
-                repository.Status = RepositoryStatus.NOT_FOUND;
+                repository.Status = ActionStatus.NOT_FOUND;
                 repository.Exception = new Exception("Job not registered.");
 
                 return repository;
@@ -33,7 +33,7 @@ public class JobRepository : GeneralRepository<Job>, IJobRepository
         }
         catch(Exception ex)
         {
-            repository.Status = RepositoryStatus.ERROR;
+            repository.Status = ActionStatus.ERROR;
             repository.Exception = ex;
 
             return repository;
@@ -51,7 +51,7 @@ public class JobRepository : GeneralRepository<Job>, IJobRepository
 
             if(data is null)
             {
-                repository.Status = RepositoryStatus.NOT_FOUND;
+                repository.Status = ActionStatus.NOT_FOUND;
                 repository.Exception = new Exception("Job not registered.");
 
                 return repository;
@@ -63,7 +63,7 @@ public class JobRepository : GeneralRepository<Job>, IJobRepository
         }
         catch (Exception ex)
         {
-            repository.Status = RepositoryStatus.ERROR;
+            repository.Status = ActionStatus.ERROR;
             repository.Exception = ex;
 
             return repository;

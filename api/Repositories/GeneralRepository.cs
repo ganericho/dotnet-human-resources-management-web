@@ -25,10 +25,21 @@ public class GeneralRepository<T> : IGeneralRepository<T> where T : class
         }
         catch (Exception ex)
         {
+            string exceptionMessage = ExceptionHandler.GetMessage(ex);
+
+            if (exceptionMessage.Contains("duplicate"))
+            {
+                return new RepositoryHandler<string>()
+                {
+                    Status = ActionStatus.CONFLICT,
+                    Message = exceptionMessage
+                };
+            }
+
             return new RepositoryHandler<string>()
             {
-                Status = RepositoryStatus.ERROR,
-                Exception = ex
+                Status = ActionStatus.ERROR,
+                Message = ExceptionHandler.GetMessage(ex)
             };
         }
     }
@@ -46,7 +57,7 @@ public class GeneralRepository<T> : IGeneralRepository<T> where T : class
         {
             return new RepositoryHandler<string>()
             {
-                Status = RepositoryStatus.ERROR,
+                Status = ActionStatus.ERROR,
                 Exception = ex
             };
         }
@@ -62,8 +73,9 @@ public class GeneralRepository<T> : IGeneralRepository<T> where T : class
 
             if (!getAll.Any())
             {
-                result.Status = RepositoryStatus.NOT_FOUND;
-                result.Exception = new Exception($"{typeof(T).Name}s is empty");
+                result.Status = ActionStatus.NOT_FOUND;
+                result.Message = "Data is empty or not found.";
+                result.Result = getAll;
 
                 return result;
             }
@@ -76,8 +88,8 @@ public class GeneralRepository<T> : IGeneralRepository<T> where T : class
         {
             return new RepositoryHandler<IEnumerable<T>>()
             {
-                Status = RepositoryStatus.ERROR,
-                Exception = ex
+                Status = ActionStatus.ERROR,
+                Message = ExceptionHandler.GetMessage(ex)
             };
         }
     }
@@ -92,7 +104,7 @@ public class GeneralRepository<T> : IGeneralRepository<T> where T : class
 
             if(getData is null)
             {
-                result.Status = RepositoryStatus.NOT_FOUND;
+                result.Status = ActionStatus.NOT_FOUND;
                 result.Exception = new Exception($"{typeof(T).Name}s is not found.");
                 return result;
             }
@@ -105,7 +117,7 @@ public class GeneralRepository<T> : IGeneralRepository<T> where T : class
         {
             return new RepositoryHandler<T>()
             {
-                Status = RepositoryStatus.ERROR,
+                Status = ActionStatus.ERROR,
                 Exception = ex
             };
         }
@@ -124,7 +136,7 @@ public class GeneralRepository<T> : IGeneralRepository<T> where T : class
         {
             return new RepositoryHandler<string>()
             {
-                Status = RepositoryStatus.ERROR,
+                Status = ActionStatus.ERROR,
                 Exception = ex
             };
         }
