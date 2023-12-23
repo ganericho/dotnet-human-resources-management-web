@@ -23,7 +23,7 @@ public class LeaveRecord : GeneralModel
     public string? UserRemark { get; set; }
 
     [Required, Column("status")]
-    public LeaveStatus Status { get; set; }
+    public string Status { get; set; }
 
     [Column("admin_remark")]
     public string? AdminRemark { get; set; }

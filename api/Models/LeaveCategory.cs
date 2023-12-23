@@ -15,8 +15,14 @@ public class LeaveCategory : GeneralModel
     [Required, Column("max_duration")]
     public int MaxDuration { get; set; }
 
-    [Required, Column("gender")]
-    public Gender Gender { get; set; } 
+    [Required, Column("is_female_only")]
+    public bool IsFemaleOnly { get; set; }
+
+    [Required, Column("limit")]
+    public int Limit { get; set; }
+
+    [Required, Column("nvarchar(20)")]
+    public string LimitType { get; set; }
 
     [Column("description")]
     public string? Description { get; set; }
