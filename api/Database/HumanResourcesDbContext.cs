@@ -1,6 +1,7 @@
 ﻿using api.Models;
 using api.Utilities.Sample;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace api.Database;
 
@@ -17,6 +18,10 @@ public class HumanResourcesDbContext : DbContext
     public DbSet<Employee> Employees { get; set; }
     public DbSet<Role> Roles { get; set; }
     public DbSet<Job> Jobs { get; set; }
+    
+    // DbSet for leave management feature
+    public DbSet<LeaveRecord> LeaveRecords { get; set; }
+    public DbSet<LeaveCategory> LeaveCategories { get; set; }
 
     // Database design
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -32,6 +37,7 @@ public class HumanResourcesDbContext : DbContext
         modelBuilder.Entity<Job>().HasIndex(j => j.Name).IsUnique();
         modelBuilder.Entity<Job>().HasIndex(j => j.Code).IsUnique();
         modelBuilder.Entity<Department>().HasIndex(d => d.Code).IsUnique();
+        modelBuilder.Entity<LeaveCategory>().HasIndex(c => c.Name).IsUnique();
 
         // Set Cardinality
         modelBuilder.Entity<Employee>()
@@ -76,6 +82,17 @@ public class HumanResourcesDbContext : DbContext
             .WithOne(jh => jh.Job)
             .HasForeignKey(jh => jh.JobGuid)
             .OnDelete(DeleteBehavior.NoAction);
+
+        modelBuilder.Entity<LeaveCategory>()
+            .HasMany(lc => lc.LeaveRecords)
+            .WithOne(lr => lr.LeaveCategory)
+            .HasForeignKey(lr => lr.LeaveCategoryGuid);
+
+        modelBuilder.Entity<Employee>()
+            .HasMany(e => e.LeaveRecords)
+            .WithOne(lr => lr.Employee)
+            .HasForeignKey(lr => lr.EmployeeGuid);
+            
 
         // Sample Data
         // Department sample data

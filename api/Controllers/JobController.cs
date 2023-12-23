@@ -57,12 +57,12 @@ public class JobController : ControllerBase
             // Get job data with specified id.
             var getJob = jobRepository.GetByGuid(guid);
 
-            if(getJob.Status == RepositoryStatus.ERROR)
+            if(getJob.Status == ActionStatus.ERROR)
             {
                 throw getJob.Exception;
             }
 
-            if(getJob.Status == RepositoryStatus.NOT_FOUND)
+            if(getJob.Status == ActionStatus.NOT_FOUND)
             {
                 return NotFound(ErrorResponseHandler.NotFound("Job with specified ID not found."));
             }
@@ -73,12 +73,12 @@ public class JobController : ControllerBase
             // Get a list of employees with related jobs.
             var getEmployees = employeeRepository.GetByJob(guid);
 
-            if(getEmployees.Status == RepositoryStatus.ERROR)
+            if(getEmployees.Status == ActionStatus.ERROR)
             {
                 throw getEmployees.Exception;
             }
 
-            if(getEmployees.Status == RepositoryStatus.NOT_FOUND)
+            if(getEmployees.Status == ActionStatus.NOT_FOUND)
             {
                 jobDetailDto.Employees = Enumerable.Empty<JobEmployeeDto>();
                 
@@ -88,14 +88,14 @@ public class JobController : ControllerBase
             // Get Accounts and Departments
             var getAccounts = accountRepository.GetAll();
 
-            if (getAccounts.Status != RepositoryStatus.SUCCESS)
+            if (getAccounts.Status != ActionStatus.SUCCESS)
             {
                 throw getAccounts.Exception;
             }
 
             var getDepartments = departmentRepository.GetAll();
 
-            if (getDepartments.Status != RepositoryStatus.SUCCESS)
+            if (getDepartments.Status != ActionStatus.SUCCESS)
             {
                 throw getDepartments.Exception;
             }
@@ -109,7 +109,7 @@ public class JobController : ControllerBase
                                          Guid = employee.Guid,
                                          FirstName = employee.FirstName,
                                          LastName = employee.LastName,
-                                         Gender = employee.Gender,
+                                         Gender = employee.Sex,
                                          BirthDate = employee.BirthDate,
                                          HiringDate = employee.HiringDate,
                                          PhoneNumber = employee.PhoneNumber,
@@ -135,12 +135,12 @@ public class JobController : ControllerBase
             // Check data availability.
             var getJob = jobRepository.GetByGuid(guid);
 
-            if(getJob.Status == RepositoryStatus.ERROR)
+            if(getJob.Status == ActionStatus.ERROR)
             {
                 throw getJob.Exception;
             }
 
-            if(getJob.Status == RepositoryStatus.NOT_FOUND)
+            if(getJob.Status == ActionStatus.NOT_FOUND)
             {
                 return NotFound(ErrorResponseHandler.NotFound("Job with specified ID not found."));
             }
@@ -148,7 +148,7 @@ public class JobController : ControllerBase
             // Delete Job
             var deleteJob = jobRepository.Delete(getJob.Result);
 
-            if(deleteJob.Status == RepositoryStatus.ERROR)
+            if(deleteJob.Status == ActionStatus.ERROR)
             {
                 throw deleteJob.Exception;
             }
@@ -169,7 +169,7 @@ public class JobController : ControllerBase
             // Create job data.
             var createJob = jobRepository.Create(createData);
 
-            if(createJob.Status == RepositoryStatus.ERROR)
+            if(createJob.Status == ActionStatus.ERROR)
             {
                 throw createJob.Exception;
             }
@@ -203,12 +203,12 @@ public class JobController : ControllerBase
             // Check data availability.
             var getJob = jobRepository.GetByGuid(jobDto.Guid);
 
-            if(getJob.Status == RepositoryStatus.ERROR)
+            if(getJob.Status == ActionStatus.ERROR)
             {
                 throw getJob.Exception;
             }
 
-            if(getJob.Status == RepositoryStatus.NOT_FOUND)
+            if(getJob.Status == ActionStatus.NOT_FOUND)
             {
                 return NotFound(ErrorResponseHandler.NotFound("Job with specified ID not found."));
             }
@@ -223,7 +223,7 @@ public class JobController : ControllerBase
 
             var updateJob = jobRepository.Update(job);
 
-            if(updateJob.Status != RepositoryStatus.SUCCESS)
+            if(updateJob.Status != ActionStatus.SUCCESS)
             {
                 throw updateJob.Exception;
             }

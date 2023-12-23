@@ -52,12 +52,12 @@ public class EmployeeController : ControllerBase
             // Get all employee data from repository.
             var getEmployees = employeeRepository.GetAll();
 
-            if (getEmployees.Status == RepositoryStatus.ERROR)
+            if (getEmployees.Status == ActionStatus.ERROR)
             {
                 throw getEmployees.Exception;
             }
 
-            if (getEmployees.Status == RepositoryStatus.NOT_FOUND)
+            if (getEmployees.Status == ActionStatus.NOT_FOUND)
             {
                 return NotFound(ErrorResponseHandler.NotFound("Employees data is empty."));
             }
@@ -65,7 +65,7 @@ public class EmployeeController : ControllerBase
             // Get all account data from repository.
             var getAccounts = accountRepository.GetAll();
 
-            if(getAccounts.Status != RepositoryStatus.SUCCESS)
+            if(getAccounts.Status != ActionStatus.SUCCESS)
             {
                 throw getAccounts.Exception;
             }
@@ -73,7 +73,7 @@ public class EmployeeController : ControllerBase
             // Get all department data from repository.
             var getDepartments = departmentRepository.GetAll();
 
-            if (getDepartments.Status != RepositoryStatus.SUCCESS)
+            if (getDepartments.Status != ActionStatus.SUCCESS)
             {
                 throw getDepartments.Exception;
             }
@@ -81,7 +81,7 @@ public class EmployeeController : ControllerBase
             // Get all job data from repository.
             var getJobs = jobRepository.GetAll();
 
-            if (getJobs.Status != RepositoryStatus.SUCCESS)
+            if (getJobs.Status != ActionStatus.SUCCESS)
             {
                 throw getJobs.Exception;
             }
@@ -100,7 +100,7 @@ public class EmployeeController : ControllerBase
                                          LastName = employee.LastName,
                                          BirthDate = employee.BirthDate,
                                          HiringDate = employee.HiringDate,
-                                         Gender = employee.Gender,
+                                         Sex = employee.Sex,
                                          Department = department.Name,
                                          Job = job.Name,
                                          Email = account.Email,
@@ -125,12 +125,12 @@ public class EmployeeController : ControllerBase
             // Get employee data from repository.
             var getEmployee = employeeRepository.GetByGuid(guid);
 
-            if (getEmployee.Status == RepositoryStatus.ERROR)
+            if (getEmployee.Status == ActionStatus.ERROR)
             {
                 throw getEmployee.Exception;
             }
 
-            if (getEmployee.Status == RepositoryStatus.NOT_FOUND)
+            if (getEmployee.Status == ActionStatus.NOT_FOUND)
             {
                 return NotFound(ErrorResponseHandler.NotFound("Employee data with specified ID not found."));
             }
@@ -140,7 +140,7 @@ public class EmployeeController : ControllerBase
             // Get employee account data from repository.
             var getAccount = accountRepository.GetByGuid(employee.Guid);
 
-            if (getAccount.Status != RepositoryStatus.SUCCESS)
+            if (getAccount.Status != ActionStatus.SUCCESS)
             {
                 throw getAccount.Exception;
             }
@@ -148,7 +148,7 @@ public class EmployeeController : ControllerBase
             // Get department data from repository.
             var getDepartment = departmentRepository.GetByGuid(employee.DepartmentGuid);
 
-            if (getDepartment.Status != RepositoryStatus.SUCCESS)
+            if (getDepartment.Status != ActionStatus.SUCCESS)
             {
                 throw getDepartment.Exception;
             }
@@ -156,7 +156,7 @@ public class EmployeeController : ControllerBase
             // Get job data from repository.
             var getJob = jobRepository.GetByGuid(employee.JobGuid);
 
-            if (getJob.Status != RepositoryStatus.SUCCESS)
+            if (getJob.Status != ActionStatus.SUCCESS)
             {
                 throw getJob.Exception;
             }
@@ -171,7 +171,7 @@ public class EmployeeController : ControllerBase
                 LastName = employee.LastName,
                 BirthDate = employee.BirthDate,
                 HiringDate = employee.HiringDate,
-                Gender = employee.Gender,
+                Sex = employee.Sex,
                 Department = getDepartment.Result.Name,
                 Job = getJob.Result.Name,
                 Email = getAccount.Result.Email,
@@ -197,12 +197,12 @@ public class EmployeeController : ControllerBase
             // Get employee data from repository.
             var getEmployee = employeeRepository.GetByGuid(guid);
 
-            if (getEmployee.Status == RepositoryStatus.ERROR)
+            if (getEmployee.Status == ActionStatus.ERROR)
             {
                 throw getEmployee.Exception;
             }
 
-            if (getEmployee.Status == RepositoryStatus.NOT_FOUND)
+            if (getEmployee.Status == ActionStatus.NOT_FOUND)
             {
                 return NotFound(ErrorResponseHandler.NotFound("Employee with specified ID not found."));
             }
@@ -210,7 +210,7 @@ public class EmployeeController : ControllerBase
             // Delete employee data.
             var deleteEmployee = employeeRepository.Delete(getEmployee.Result);
 
-            if (deleteEmployee.Status != RepositoryStatus.SUCCESS)
+            if (deleteEmployee.Status != ActionStatus.SUCCESS)
             {
                 throw deleteEmployee.Exception;
             }
@@ -233,21 +233,21 @@ public class EmployeeController : ControllerBase
             // Check new employee job, department and role availability.
             var getJob = jobRepository.GetByCode(createData.JobCode);
 
-            if(getJob.Status != RepositoryStatus.SUCCESS)
+            if(getJob.Status != ActionStatus.SUCCESS)
             {
                 throw getJob.Exception;
             }
 
             var getDepartment = departmentRepository.GetByCode(createData.DepartmentCode);
 
-            if(getDepartment.Status != RepositoryStatus.SUCCESS)
+            if(getDepartment.Status != ActionStatus.SUCCESS)
             {
                 throw getDepartment.Exception;
             }
 
             var getRole = roleRepository.GetByName(createData.Role);
 
-            if (getRole.Status != RepositoryStatus.SUCCESS)
+            if (getRole.Status != ActionStatus.SUCCESS)
             {
                 throw getRole.Exception;
             }
@@ -259,7 +259,7 @@ public class EmployeeController : ControllerBase
 
             var createEmployee = employeeRepository.Create(employee);
 
-            if (createEmployee.Status != RepositoryStatus.SUCCESS)
+            if (createEmployee.Status != ActionStatus.SUCCESS)
             {
                 throw createEmployee.Exception;
             }
@@ -280,7 +280,7 @@ public class EmployeeController : ControllerBase
 
             var createAccount = accountRepository.Create(account);
 
-            if (createAccount.Status != RepositoryStatus.SUCCESS)
+            if (createAccount.Status != ActionStatus.SUCCESS)
             {
                 throw createAccount.Exception;
             }
@@ -297,7 +297,7 @@ public class EmployeeController : ControllerBase
 
             var createAccountRole = accountRoleRepository.Create(accountRole);
 
-            if(createAccountRole.Status != RepositoryStatus.SUCCESS)
+            if(createAccountRole.Status != ActionStatus.SUCCESS)
             {
                 throw createAccountRole.Exception;
             }
@@ -316,7 +316,7 @@ public class EmployeeController : ControllerBase
 
             var createJobHistory = jobHistoryRepository.Create(jobHistory);
 
-            if(createJobHistory.Status != RepositoryStatus.SUCCESS)
+            if(createJobHistory.Status != ActionStatus.SUCCESS)
             {
                 throw createJobHistory.Exception;
             }
@@ -357,12 +357,12 @@ public class EmployeeController : ControllerBase
             // Get employee data from repository.
             var getEmployee = employeeRepository.GetByGuid(updateData.Guid);
 
-            if (getEmployee.Status == RepositoryStatus.ERROR)
+            if (getEmployee.Status == ActionStatus.ERROR)
             {
                 throw getEmployee.Exception;
             }
 
-            if (getEmployee.Status == RepositoryStatus.NOT_FOUND)
+            if (getEmployee.Status == ActionStatus.NOT_FOUND)
             {
                 return NotFound(ErrorResponseHandler.NotFound("Employee with specified ID not found."));
             }
@@ -370,21 +370,21 @@ public class EmployeeController : ControllerBase
             // Get department, job, and role data from repository.
             var getDepartment = departmentRepository.GetByCode(updateData.DepartmentCode);
 
-            if(getDepartment.Status != RepositoryStatus.SUCCESS)
+            if(getDepartment.Status != ActionStatus.SUCCESS)
             {
                 throw getDepartment.Exception;
             }
 
             var getJob = jobRepository.GetByCode(updateData.JobCode);
 
-            if (getJob.Status != RepositoryStatus.SUCCESS)
+            if (getJob.Status != ActionStatus.SUCCESS)
             {
                 throw getJob.Exception;
             }
 
             var getRole = roleRepository.GetByName(updateData.Role);
 
-            if (getRole.Status != RepositoryStatus.SUCCESS)
+            if (getRole.Status != ActionStatus.SUCCESS)
             {
                 throw getRole.Exception;
             }
@@ -400,11 +400,11 @@ public class EmployeeController : ControllerBase
             employee.JobGuid = getJob.Result.Guid;
             employee.DepartmentGuid = getDepartment.Result.Guid;
             employee.PhoneNumber = updateData.PhoneNumber;
-            employee.Gender = updateData.Gender;
+            employee.Sex = updateData.Gender;
 
             var updateEmployee = employeeRepository.Update(employee);
 
-            if (updateEmployee.Status != RepositoryStatus.SUCCESS)
+            if (updateEmployee.Status != ActionStatus.SUCCESS)
             {
                 throw updateEmployee.Exception;
             }
@@ -412,7 +412,7 @@ public class EmployeeController : ControllerBase
             // Update employee account data.
             var getAccount = accountRepository.GetByGuid(employee.Guid);
 
-            if (getAccount.Status != RepositoryStatus.SUCCESS)
+            if (getAccount.Status != ActionStatus.SUCCESS)
             {
                 throw getAccount.Exception;
             }
@@ -430,7 +430,7 @@ public class EmployeeController : ControllerBase
 
             var updateAccount = accountRepository.Update(account);
 
-            if (updateAccount.Status != RepositoryStatus.SUCCESS)
+            if (updateAccount.Status != ActionStatus.SUCCESS)
             {
                 throw updateAccount.Exception;
             }
