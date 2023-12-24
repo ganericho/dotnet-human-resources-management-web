@@ -33,7 +33,7 @@ public class JobRepository : GeneralRepository<Job>, IJobRepository
         }
         catch(Exception ex)
         {
-            repository.Status = RepositoryStatus.ERROR;
+            repository.Status = RepositoryStatus.FAILED;
             repository.Exception = ex;
 
             return repository;
@@ -63,7 +63,7 @@ public class JobRepository : GeneralRepository<Job>, IJobRepository
         }
         catch (Exception ex)
         {
-            repository.Status = RepositoryStatus.ERROR;
+            repository.Status = RepositoryStatus.FAILED;
             repository.Exception = ex;
 
             return repository;

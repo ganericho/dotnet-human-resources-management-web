@@ -57,7 +57,7 @@ public class JobController : ControllerBase
             // Get job data with specified id.
             var getJob = jobRepository.GetByGuid(guid);
 
-            if(getJob.Status == RepositoryStatus.ERROR)
+            if(getJob.Status == RepositoryStatus.FAILED)
             {
                 throw getJob.Exception;
             }
@@ -73,7 +73,7 @@ public class JobController : ControllerBase
             // Get a list of employees with related jobs.
             var getEmployees = employeeRepository.GetByJob(guid);
 
-            if(getEmployees.Status == RepositoryStatus.ERROR)
+            if(getEmployees.Status == RepositoryStatus.FAILED)
             {
                 throw getEmployees.Exception;
             }
@@ -135,7 +135,7 @@ public class JobController : ControllerBase
             // Check data availability.
             var getJob = jobRepository.GetByGuid(guid);
 
-            if(getJob.Status == RepositoryStatus.ERROR)
+            if(getJob.Status == RepositoryStatus.FAILED)
             {
                 throw getJob.Exception;
             }
@@ -148,7 +148,7 @@ public class JobController : ControllerBase
             // Delete Job
             var deleteJob = jobRepository.Delete(getJob.Result);
 
-            if(deleteJob.Status == RepositoryStatus.ERROR)
+            if(deleteJob.Status == RepositoryStatus.FAILED)
             {
                 throw deleteJob.Exception;
             }
@@ -169,7 +169,7 @@ public class JobController : ControllerBase
             // Create job data.
             var createJob = jobRepository.Create(createData);
 
-            if(createJob.Status == RepositoryStatus.ERROR)
+            if(createJob.Status == RepositoryStatus.FAILED)
             {
                 throw createJob.Exception;
             }
@@ -203,7 +203,7 @@ public class JobController : ControllerBase
             // Check data availability.
             var getJob = jobRepository.GetByGuid(jobDto.Guid);
 
-            if(getJob.Status == RepositoryStatus.ERROR)
+            if(getJob.Status == RepositoryStatus.FAILED)
             {
                 throw getJob.Exception;
             }

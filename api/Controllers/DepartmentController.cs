@@ -1,7 +1,9 @@
 ﻿using api.Contracts;
+using api.Contracts.Services;
 using api.Dtos.DepartmentData;
 using api.Utilities;
 using api.Utilities.Handlers;
+using api.Utilities.ServiceResponses;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using System.Dynamic;
@@ -16,17 +18,15 @@ public class DepartmentController : ControllerBase
     private readonly IEmployeeRepository employeeRepository;
     private readonly IAccountRepository accountRepository;
     private readonly IJobRepository jobRepository;
+    private readonly IDepartmentService departmentService;
 
-    public DepartmentController(
-        IDepartmentRepository departmentRepository,
-        IEmployeeRepository employeeRepository,
-        IJobRepository jobRepository,
-        IAccountRepository accountRepository)
+    public DepartmentController(IDepartmentRepository departmentRepository, IEmployeeRepository employeeRepository, IAccountRepository accountRepository, IJobRepository jobRepository, IDepartmentService departmentService)
     {
         this.departmentRepository = departmentRepository;
         this.employeeRepository = employeeRepository;
-        this.jobRepository = jobRepository;
         this.accountRepository = accountRepository;
+        this.jobRepository = jobRepository;
+        this.departmentService = departmentService;
     }
 
     [HttpPost()]
@@ -37,7 +37,7 @@ public class DepartmentController : ControllerBase
             // Create new department
             var createDepartment = departmentRepository.Create(createData);
 
-            if (createDepartment.Status == RepositoryStatus.ERROR)
+            if (createDepartment.Status == RepositoryStatus.FAILED)
             {
                 throw createDepartment.Exception;
             }
@@ -70,7 +70,7 @@ public class DepartmentController : ControllerBase
             // Get department data
             var getDepartment = departmentRepository.GetByGuid(updateData.Guid);
 
-            if (getDepartment.Status == RepositoryStatus.ERROR)
+            if (getDepartment.Status == RepositoryStatus.FAILED)
             {
                 throw getDepartment.Exception;
             }
@@ -90,7 +90,7 @@ public class DepartmentController : ControllerBase
 
             var updateDepartment = departmentRepository.Update(department);
 
-            if (updateDepartment.Status == RepositoryStatus.ERROR)
+            if (updateDepartment.Status == RepositoryStatus.FAILED)
             {
                 throw updateDepartment.Exception;
             }
@@ -125,7 +125,7 @@ public class DepartmentController : ControllerBase
             // Check department availability
             var getDepartment = departmentRepository.GetByGuid(guid);
 
-            if (getDepartment.Status == RepositoryStatus.ERROR)
+            if (getDepartment.Status == RepositoryStatus.FAILED)
             {
                 throw getDepartment.Exception;
             }
@@ -138,7 +138,7 @@ public class DepartmentController : ControllerBase
             // Delete department
             var deleteDepartment = departmentRepository.Delete(getDepartment.Result);
 
-            if (deleteDepartment.Status == RepositoryStatus.ERROR)
+            if (deleteDepartment.Status == RepositoryStatus.FAILED)
             {
                 throw deleteDepartment.Exception;
             }
@@ -155,31 +155,18 @@ public class DepartmentController : ControllerBase
     [HttpGet]
     public IActionResult GetAll()
     {
-        try
+        ServiceResponse getDepartments = departmentService.GetAll();
+
+        switch (getDepartments.Code)
         {
-            // Get all department data
-            var getDepartments = departmentRepository.GetAll();
+            case StatusCodes.Status200OK:
+                return Ok(getDepartments);
 
-            if(getDepartments.Status == RepositoryStatus.ERROR)
-            {
-                throw getDepartments.Exception;
-            }
-
-            if(getDepartments.Status == api.Utilities.RepositoryStatus.NOT_FOUND)
-            {
-                return NotFound(ErrorResponseHandler.NotFound(ResponseMessages.DepartmentsDataIsEmpty));
-            }
-
-            var departmentDto = getDepartments.Result.Select(department => (DepartmentDto) department);
-
-            // Success response
-            return Ok(OkResponseHandler.Success(departmentDto));
-        }
-        catch(Exception ex)
-        {
-            return StatusCode(StatusCodes.Status500InternalServerError, ErrorResponseHandler.InternalServerError(ex.Message));
+            default:
+                return StatusCode(StatusCodes.Status500InternalServerError, getDepartments);
         }
     }
+
     [HttpGet("{guid}")]
     public IActionResult GetByGuid(Guid guid)
     {
@@ -188,7 +175,7 @@ public class DepartmentController : ControllerBase
             // Get department data
             var getDepartment = departmentRepository.GetByGuid(guid);
 
-            if(getDepartment.Status == RepositoryStatus.ERROR)
+            if(getDepartment.Status == RepositoryStatus.FAILED)
             {
                 throw getDepartment.Exception;
             }
@@ -204,7 +191,7 @@ public class DepartmentController : ControllerBase
             // Get department Employee
             var getEmployees = employeeRepository.GetByDepartment(guid);
 
-            if(getEmployees.Status == RepositoryStatus.ERROR)
+            if(getEmployees.Status == RepositoryStatus.FAILED)
             {
                 throw getEmployees.Exception;
             }
@@ -219,14 +206,14 @@ public class DepartmentController : ControllerBase
             // Merge employees data
             var getAccounts = accountRepository.GetAll();
 
-            if(getAccounts.Status == RepositoryStatus.ERROR)
+            if(getAccounts.Status == RepositoryStatus.FAILED)
             {
                 throw getAccounts.Exception;
             }
 
             var getJobs = jobRepository.GetAll();
 
-            if(getJobs.Status == RepositoryStatus.ERROR)
+            if(getJobs.Status == RepositoryStatus.FAILED)
             {
                 throw getJobs.Exception;
             }

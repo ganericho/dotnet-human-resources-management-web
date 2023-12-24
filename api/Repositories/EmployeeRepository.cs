@@ -35,7 +35,7 @@ public class EmployeeRepository : GeneralRepository<Employee>, IEmployeeReposito
         {
             return new RepositoryHandler<IEnumerable<Employee>>()
             {
-                Status = RepositoryStatus.ERROR,
+                Status = RepositoryStatus.FAILED,
                 Exception = ex
             };
         }
@@ -63,7 +63,7 @@ public class EmployeeRepository : GeneralRepository<Employee>, IEmployeeReposito
         {
             return new RepositoryHandler<IEnumerable<Employee>>()
             {
-                Status = RepositoryStatus.ERROR,
+                Status = RepositoryStatus.FAILED,
                 Exception = ex
             };
         }

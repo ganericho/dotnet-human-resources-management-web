@@ -1,8 +1,8 @@
 ﻿namespace api.Utilities;
 
-public class ResponseMessages
+public class Messages
 {
-    // General API response message
+    // General response message
     public static string SuccessRetrieveData = "Success to retrieve data.";
     public static string DataDeletedSuccessfully = "Data deleted successfully.";
     public static string Empty = "Empty";

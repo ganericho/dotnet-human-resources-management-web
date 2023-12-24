@@ -41,7 +41,7 @@ public class JobHistoryController : ControllerBase
         {
             var getJobHistory = jobHistoryRepository.GetByEmployeeGuid(guid);
 
-            if (getJobHistory.Status == Utilities.RepositoryStatus.ERROR)
+            if (getJobHistory.Status == Utilities.RepositoryStatus.FAILED)
             {
                 throw getJobHistory.Exception;
             }
@@ -71,7 +71,7 @@ public class JobHistoryController : ControllerBase
             // Get job history data from repository.
             var getJobHistory = jobHistoryRepository.GetByGuid(guid);
 
-            if(getJobHistory.Status == Utilities.RepositoryStatus.ERROR)
+            if(getJobHistory.Status == Utilities.RepositoryStatus.FAILED)
             {
                 throw getJobHistory.Exception;
             }

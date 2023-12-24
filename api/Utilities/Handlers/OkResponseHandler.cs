@@ -6,8 +6,8 @@ public class OkResponseHandler
 {
     public int Code { get; set; } = StatusCodes.Status200OK;
     public string Status { get; set; } = HttpStatusCode.OK.ToString();
-    public string Message { get; set; } = ResponseMessages.SuccessRetrieveData;
-    public object? Data { get; set; } = ResponseMessages.Empty;
+    public string Message { get; set; } = Messages.SuccessRetrieveData;
+    public object? Data { get; set; } = Messages.Empty;
 
     public OkResponseHandler() { }
 
@@ -28,7 +28,7 @@ public class OkResponseHandler
     {
         return new OkResponseHandler()
         {
-            Message = ResponseMessages.DataCreatedSuccessfully
+            Message = Messages.DataCreatedSuccessfully
         };
     }
 
@@ -36,7 +36,7 @@ public class OkResponseHandler
     {
         return new OkResponseHandler()
         {
-            Message = ResponseMessages.DataDeletedSuccessfully
+            Message = Messages.DataDeletedSuccessfully
         };
     }
 
@@ -44,7 +44,7 @@ public class OkResponseHandler
     {
         return new OkResponseHandler()
         {
-            Message = ResponseMessages.DataUpdatedSuccessfully
+            Message = Messages.DataUpdatedSuccessfully
         };
     }
 

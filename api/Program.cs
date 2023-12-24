@@ -2,6 +2,7 @@ using api.Contracts;
 using api.Contracts.Services;
 using api.Database;
 using api.Repositories;
+using api.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,6 +21,8 @@ builder.Services.AddScoped<IJobHistoryRepository, JobHistoryRepository>();
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();
 builder.Services.AddScoped<ILeaveCategoryRepository, LeaveCategoryRepository>();
 builder.Services.AddScoped<ILeaveRecordRepository, LeaveRecordRepository>();
+
+builder.Services.AddScoped<IDepartmentService, DepartmentService>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

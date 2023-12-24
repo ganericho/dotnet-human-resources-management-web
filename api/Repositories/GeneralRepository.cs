@@ -38,7 +38,7 @@ public class GeneralRepository<T> : IGeneralRepository<T> where T : class
 
             return new RepositoryHandler<string>()
             {
-                Status = RepositoryStatus.ERROR,
+                Status = RepositoryStatus.FAILED,
                 Message = ExceptionHandler.GetMessage(ex)
             };
         }
@@ -57,7 +57,7 @@ public class GeneralRepository<T> : IGeneralRepository<T> where T : class
         {
             return new RepositoryHandler<string>()
             {
-                Status = RepositoryStatus.ERROR,
+                Status = RepositoryStatus.FAILED,
                 Exception = ex
             };
         }
@@ -65,32 +65,36 @@ public class GeneralRepository<T> : IGeneralRepository<T> where T : class
 
     public RepositoryHandler<IEnumerable<T>> GetAll()
     {
+        // Create repository result entity.
+        var repository = new RepositoryHandler<IEnumerable<T>>();
+        
         try
         {
+            // Get all data from database.
             var getAll = context.Set<T>().ToList();
 
-            var result = new RepositoryHandler<IEnumerable<T>>();
+            repository.Result = getAll;
 
+            // Return empty data.
             if (!getAll.Any())
             {
-                result.Status = RepositoryStatus.NOT_FOUND;
-                result.Message = "Data is empty or not found.";
-                result.Result = getAll;
+                repository.Message = Messages.Empty;
 
-                return result;
+                return repository;
             }
 
-            result.Result = getAll;
+            // Return with data.
+            repository.Message = Messages.SuccessRetrieveData;
 
-            return result;
+            return repository;
         }
         catch (Exception ex)
         {
-            return new RepositoryHandler<IEnumerable<T>>()
-            {
-                Status = RepositoryStatus.ERROR,
-                Message = ExceptionHandler.GetMessage(ex)
-            };
+            repository.Status = RepositoryStatus.FAILED;
+            repository.Message = ExceptionHandler.GetMessage(ex);
+            repository.Result = Enumerable.Empty<T>();
+
+            return repository;
         }
     }
 
@@ -117,7 +121,7 @@ public class GeneralRepository<T> : IGeneralRepository<T> where T : class
         {
             return new RepositoryHandler<T>()
             {
-                Status = RepositoryStatus.ERROR,
+                Status = RepositoryStatus.FAILED,
                 Exception = ex
             };
         }
@@ -136,7 +140,7 @@ public class GeneralRepository<T> : IGeneralRepository<T> where T : class
         {
             return new RepositoryHandler<string>()
             {
-                Status = RepositoryStatus.ERROR,
+                Status = RepositoryStatus.FAILED,
                 Exception = ex
             };
         }

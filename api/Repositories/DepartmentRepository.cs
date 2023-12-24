@@ -33,7 +33,7 @@ public class DepartmentRepository : GeneralRepository<Department>, IDepartmentRe
         }
         catch(Exception ex)
         {
-            repository.Status = RepositoryStatus.ERROR;
+            repository.Status = RepositoryStatus.FAILED;
             repository.Exception = ex;
 
             return repository;
@@ -62,7 +62,7 @@ public class DepartmentRepository : GeneralRepository<Department>, IDepartmentRe
         }
         catch (Exception ex)
         {
-            repository.Status = RepositoryStatus.ERROR;
+            repository.Status = RepositoryStatus.FAILED;
             repository.Exception = ex;
 
             return repository;

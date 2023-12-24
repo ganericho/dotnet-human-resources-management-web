@@ -2,15 +2,16 @@
 using api.Models;
 using api.Utilities;
 using api.Utilities.Handlers;
+using api.Utilities.ServiceResponses;
 
 namespace api.Contracts.Services;
 
 public interface ILeaveCategoryService
 {
-    public ServiceHandler<IEnumerable<LeaveCategoryDto>> GetAll();
-    public ServiceHandler<LeaveCategoryDto> GetByGuid(Guid guid);
-    public ServiceHandler<bool> Create(CreateLeaveCategoryDto createData);
-    public ServiceHandler<bool> Update(LeaveCategoryDto updateData);
-    public ServiceHandler<bool> Delete(Guid guid);
+    public ServiceResponse GetAll();
+    public ServiceResponse GetByGuid(Guid guid);
+    public ServiceResponse Create(CreateLeaveCategoryDto createData);
+    public ServiceResponse Update(LeaveCategoryDto updateData);
+    public ServiceResponse Delete(Guid guid);
    
 }

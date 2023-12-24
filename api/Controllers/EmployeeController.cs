@@ -52,7 +52,7 @@ public class EmployeeController : ControllerBase
             // Get all employee data from repository.
             var getEmployees = employeeRepository.GetAll();
 
-            if (getEmployees.Status == RepositoryStatus.ERROR)
+            if (getEmployees.Status == RepositoryStatus.FAILED)
             {
                 throw getEmployees.Exception;
             }
@@ -125,7 +125,7 @@ public class EmployeeController : ControllerBase
             // Get employee data from repository.
             var getEmployee = employeeRepository.GetByGuid(guid);
 
-            if (getEmployee.Status == RepositoryStatus.ERROR)
+            if (getEmployee.Status == RepositoryStatus.FAILED)
             {
                 throw getEmployee.Exception;
             }
@@ -197,7 +197,7 @@ public class EmployeeController : ControllerBase
             // Get employee data from repository.
             var getEmployee = employeeRepository.GetByGuid(guid);
 
-            if (getEmployee.Status == RepositoryStatus.ERROR)
+            if (getEmployee.Status == RepositoryStatus.FAILED)
             {
                 throw getEmployee.Exception;
             }
@@ -357,7 +357,7 @@ public class EmployeeController : ControllerBase
             // Get employee data from repository.
             var getEmployee = employeeRepository.GetByGuid(updateData.Guid);
 
-            if (getEmployee.Status == RepositoryStatus.ERROR)
+            if (getEmployee.Status == RepositoryStatus.FAILED)
             {
                 throw getEmployee.Exception;
             }

@@ -3,7 +3,7 @@
 public enum RepositoryStatus
 {
     SUCCESS,
-    ERROR,
+    FAILED,
     NOT_FOUND,
     CONFLICT
 }
