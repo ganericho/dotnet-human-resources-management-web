@@ -21,7 +21,7 @@ public class EmployeeRepository : GeneralRepository<Employee>, IEmployeeReposito
 
             if (!getAll.Any())
             {
-                result.Status = ActionStatus.NOT_FOUND;
+                result.Status = RepositoryStatus.NOT_FOUND;
                 result.Exception = new Exception("Employees is empty");
 
                 return result;
@@ -35,7 +35,7 @@ public class EmployeeRepository : GeneralRepository<Employee>, IEmployeeReposito
         {
             return new RepositoryHandler<IEnumerable<Employee>>()
             {
-                Status = ActionStatus.ERROR,
+                Status = RepositoryStatus.ERROR,
                 Exception = ex
             };
         }
@@ -51,7 +51,7 @@ public class EmployeeRepository : GeneralRepository<Employee>, IEmployeeReposito
 
             if (!getData.Any())
             {
-                result.Status = ActionStatus.NOT_FOUND;
+                result.Status = RepositoryStatus.NOT_FOUND;
             }
 
             result.Result = getData;
@@ -63,7 +63,7 @@ public class EmployeeRepository : GeneralRepository<Employee>, IEmployeeReposito
         {
             return new RepositoryHandler<IEnumerable<Employee>>()
             {
-                Status = ActionStatus.ERROR,
+                Status = RepositoryStatus.ERROR,
                 Exception = ex
             };
         }

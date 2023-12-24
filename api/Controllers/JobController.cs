@@ -57,12 +57,12 @@ public class JobController : ControllerBase
             // Get job data with specified id.
             var getJob = jobRepository.GetByGuid(guid);
 
-            if(getJob.Status == ActionStatus.ERROR)
+            if(getJob.Status == RepositoryStatus.ERROR)
             {
                 throw getJob.Exception;
             }
 
-            if(getJob.Status == ActionStatus.NOT_FOUND)
+            if(getJob.Status == RepositoryStatus.NOT_FOUND)
             {
                 return NotFound(ErrorResponseHandler.NotFound("Job with specified ID not found."));
             }
@@ -73,12 +73,12 @@ public class JobController : ControllerBase
             // Get a list of employees with related jobs.
             var getEmployees = employeeRepository.GetByJob(guid);
 
-            if(getEmployees.Status == ActionStatus.ERROR)
+            if(getEmployees.Status == RepositoryStatus.ERROR)
             {
                 throw getEmployees.Exception;
             }
 
-            if(getEmployees.Status == ActionStatus.NOT_FOUND)
+            if(getEmployees.Status == RepositoryStatus.NOT_FOUND)
             {
                 jobDetailDto.Employees = Enumerable.Empty<JobEmployeeDto>();
                 
@@ -88,14 +88,14 @@ public class JobController : ControllerBase
             // Get Accounts and Departments
             var getAccounts = accountRepository.GetAll();
 
-            if (getAccounts.Status != ActionStatus.SUCCESS)
+            if (getAccounts.Status != RepositoryStatus.SUCCESS)
             {
                 throw getAccounts.Exception;
             }
 
             var getDepartments = departmentRepository.GetAll();
 
-            if (getDepartments.Status != ActionStatus.SUCCESS)
+            if (getDepartments.Status != RepositoryStatus.SUCCESS)
             {
                 throw getDepartments.Exception;
             }
@@ -135,12 +135,12 @@ public class JobController : ControllerBase
             // Check data availability.
             var getJob = jobRepository.GetByGuid(guid);
 
-            if(getJob.Status == ActionStatus.ERROR)
+            if(getJob.Status == RepositoryStatus.ERROR)
             {
                 throw getJob.Exception;
             }
 
-            if(getJob.Status == ActionStatus.NOT_FOUND)
+            if(getJob.Status == RepositoryStatus.NOT_FOUND)
             {
                 return NotFound(ErrorResponseHandler.NotFound("Job with specified ID not found."));
             }
@@ -148,7 +148,7 @@ public class JobController : ControllerBase
             // Delete Job
             var deleteJob = jobRepository.Delete(getJob.Result);
 
-            if(deleteJob.Status == ActionStatus.ERROR)
+            if(deleteJob.Status == RepositoryStatus.ERROR)
             {
                 throw deleteJob.Exception;
             }
@@ -169,7 +169,7 @@ public class JobController : ControllerBase
             // Create job data.
             var createJob = jobRepository.Create(createData);
 
-            if(createJob.Status == ActionStatus.ERROR)
+            if(createJob.Status == RepositoryStatus.ERROR)
             {
                 throw createJob.Exception;
             }
@@ -203,12 +203,12 @@ public class JobController : ControllerBase
             // Check data availability.
             var getJob = jobRepository.GetByGuid(jobDto.Guid);
 
-            if(getJob.Status == ActionStatus.ERROR)
+            if(getJob.Status == RepositoryStatus.ERROR)
             {
                 throw getJob.Exception;
             }
 
-            if(getJob.Status == ActionStatus.NOT_FOUND)
+            if(getJob.Status == RepositoryStatus.NOT_FOUND)
             {
                 return NotFound(ErrorResponseHandler.NotFound("Job with specified ID not found."));
             }
@@ -223,7 +223,7 @@ public class JobController : ControllerBase
 
             var updateJob = jobRepository.Update(job);
 
-            if(updateJob.Status != ActionStatus.SUCCESS)
+            if(updateJob.Status != RepositoryStatus.SUCCESS)
             {
                 throw updateJob.Exception;
             }

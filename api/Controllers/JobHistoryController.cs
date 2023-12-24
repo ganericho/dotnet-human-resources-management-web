@@ -41,12 +41,12 @@ public class JobHistoryController : ControllerBase
         {
             var getJobHistory = jobHistoryRepository.GetByEmployeeGuid(guid);
 
-            if (getJobHistory.Status == Utilities.ActionStatus.ERROR)
+            if (getJobHistory.Status == Utilities.RepositoryStatus.ERROR)
             {
                 throw getJobHistory.Exception;
             }
 
-            if (getJobHistory.Status == Utilities.ActionStatus.NOT_FOUND)
+            if (getJobHistory.Status == Utilities.RepositoryStatus.NOT_FOUND)
             {
                 var emptyResult = Enumerable.Empty<JobHistoryDto>();
 
@@ -71,12 +71,12 @@ public class JobHistoryController : ControllerBase
             // Get job history data from repository.
             var getJobHistory = jobHistoryRepository.GetByGuid(guid);
 
-            if(getJobHistory.Status == Utilities.ActionStatus.ERROR)
+            if(getJobHistory.Status == Utilities.RepositoryStatus.ERROR)
             {
                 throw getJobHistory.Exception;
             }
 
-            if (getJobHistory.Status == Utilities.ActionStatus.NOT_FOUND)
+            if (getJobHistory.Status == Utilities.RepositoryStatus.NOT_FOUND)
             {
                 return NotFound(ErrorResponseHandler.NotFound("Job history with specified ID not found."));
             }
@@ -84,7 +84,7 @@ public class JobHistoryController : ControllerBase
             // Delete job history data via repository.
             var deleteJobHistory = jobHistoryRepository.Delete(getJobHistory.Result);
 
-            if(deleteJobHistory.Status != ActionStatus.SUCCESS)
+            if(deleteJobHistory.Status != RepositoryStatus.SUCCESS)
             {
                 throw deleteJobHistory.Exception;
             }
@@ -108,7 +108,7 @@ public class JobHistoryController : ControllerBase
             // Get job data from repository.
             var getJob = jobRepository.GetByCode(createData.JobCode);
 
-            if (getJob.Status != ActionStatus.SUCCESS)
+            if (getJob.Status != RepositoryStatus.SUCCESS)
             {
                 throw getJob.Exception;
             }
@@ -121,7 +121,7 @@ public class JobHistoryController : ControllerBase
 
             var createJobHistory = jobHistoryRepository.Create(jobHistory);
 
-            if (createJobHistory.Status != ActionStatus.SUCCESS)
+            if (createJobHistory.Status != RepositoryStatus.SUCCESS)
             {
                 throw createJobHistory.Exception;
             }
@@ -146,7 +146,7 @@ public class JobHistoryController : ControllerBase
             // Get job history data from repository.
             var getJobHistory = jobHistoryRepository.GetByGuid(updateData.Guid);
 
-            if (getJobHistory.Status != ActionStatus.SUCCESS)
+            if (getJobHistory.Status != RepositoryStatus.SUCCESS)
             {
                 throw getJobHistory.Exception;
             }
@@ -154,7 +154,7 @@ public class JobHistoryController : ControllerBase
             // Get job data from repository.
             var getJob = jobRepository.GetByCode(updateData.JobCode);
             
-            if (getJob.Status != ActionStatus.SUCCESS)
+            if (getJob.Status != RepositoryStatus.SUCCESS)
             {
                 throw getJob.Exception;
             }
@@ -170,7 +170,7 @@ public class JobHistoryController : ControllerBase
             // Get employee job histories from repository.
             var getEmployeeJobHistories = jobHistoryRepository.GetByEmployeeGuid(jobHistory.EmployeeGuid);
 
-            if (getEmployeeJobHistories.Status != ActionStatus.SUCCESS)
+            if (getEmployeeJobHistories.Status != RepositoryStatus.SUCCESS)
             {
                 throw getEmployeeJobHistories.Exception;
             }
@@ -186,7 +186,7 @@ public class JobHistoryController : ControllerBase
 
                 var updateActiveJobHistory = jobHistoryRepository.Update(activeJobHistory);
 
-                if (updateActiveJobHistory.Status != ActionStatus.SUCCESS)
+                if (updateActiveJobHistory.Status != RepositoryStatus.SUCCESS)
                 {
                     throw updateActiveJobHistory.Exception;
                 }

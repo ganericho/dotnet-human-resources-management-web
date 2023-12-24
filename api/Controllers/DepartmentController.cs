@@ -37,7 +37,7 @@ public class DepartmentController : ControllerBase
             // Create new department
             var createDepartment = departmentRepository.Create(createData);
 
-            if (createDepartment.Status == ActionStatus.ERROR)
+            if (createDepartment.Status == RepositoryStatus.ERROR)
             {
                 throw createDepartment.Exception;
             }
@@ -70,12 +70,12 @@ public class DepartmentController : ControllerBase
             // Get department data
             var getDepartment = departmentRepository.GetByGuid(updateData.Guid);
 
-            if (getDepartment.Status == ActionStatus.ERROR)
+            if (getDepartment.Status == RepositoryStatus.ERROR)
             {
                 throw getDepartment.Exception;
             }
 
-            if (getDepartment.Status == ActionStatus.NOT_FOUND)
+            if (getDepartment.Status == RepositoryStatus.NOT_FOUND)
             {
                 return NotFound(ErrorResponseHandler.NotFound("Department with specified ID not found."));
             }
@@ -90,7 +90,7 @@ public class DepartmentController : ControllerBase
 
             var updateDepartment = departmentRepository.Update(department);
 
-            if (updateDepartment.Status == ActionStatus.ERROR)
+            if (updateDepartment.Status == RepositoryStatus.ERROR)
             {
                 throw updateDepartment.Exception;
             }
@@ -125,12 +125,12 @@ public class DepartmentController : ControllerBase
             // Check department availability
             var getDepartment = departmentRepository.GetByGuid(guid);
 
-            if (getDepartment.Status == ActionStatus.ERROR)
+            if (getDepartment.Status == RepositoryStatus.ERROR)
             {
                 throw getDepartment.Exception;
             }
 
-            if (getDepartment.Status == ActionStatus.NOT_FOUND)
+            if (getDepartment.Status == RepositoryStatus.NOT_FOUND)
             {
                 return NotFound(ErrorResponseHandler.NotFound("Department with specified ID not found."));
             }
@@ -138,7 +138,7 @@ public class DepartmentController : ControllerBase
             // Delete department
             var deleteDepartment = departmentRepository.Delete(getDepartment.Result);
 
-            if (deleteDepartment.Status == ActionStatus.ERROR)
+            if (deleteDepartment.Status == RepositoryStatus.ERROR)
             {
                 throw deleteDepartment.Exception;
             }
@@ -160,12 +160,12 @@ public class DepartmentController : ControllerBase
             // Get all department data
             var getDepartments = departmentRepository.GetAll();
 
-            if(getDepartments.Status == ActionStatus.ERROR)
+            if(getDepartments.Status == RepositoryStatus.ERROR)
             {
                 throw getDepartments.Exception;
             }
 
-            if(getDepartments.Status == api.Utilities.ActionStatus.NOT_FOUND)
+            if(getDepartments.Status == api.Utilities.RepositoryStatus.NOT_FOUND)
             {
                 return NotFound(ErrorResponseHandler.NotFound(ResponseMessages.DepartmentsDataIsEmpty));
             }
@@ -188,12 +188,12 @@ public class DepartmentController : ControllerBase
             // Get department data
             var getDepartment = departmentRepository.GetByGuid(guid);
 
-            if(getDepartment.Status == ActionStatus.ERROR)
+            if(getDepartment.Status == RepositoryStatus.ERROR)
             {
                 throw getDepartment.Exception;
             }
 
-            if(getDepartment.Status == ActionStatus.NOT_FOUND)
+            if(getDepartment.Status == RepositoryStatus.NOT_FOUND)
             {
                 return NotFound(ErrorResponseHandler.NotFound("Department with specified ID not found."));
             }
@@ -204,12 +204,12 @@ public class DepartmentController : ControllerBase
             // Get department Employee
             var getEmployees = employeeRepository.GetByDepartment(guid);
 
-            if(getEmployees.Status == ActionStatus.ERROR)
+            if(getEmployees.Status == RepositoryStatus.ERROR)
             {
                 throw getEmployees.Exception;
             }
 
-            if(getEmployees.Status == ActionStatus.NOT_FOUND)
+            if(getEmployees.Status == RepositoryStatus.NOT_FOUND)
             {
                 departmentDetailDto.Employees = Enumerable.Empty<DepartmentEmployeeDto>();
 
@@ -219,14 +219,14 @@ public class DepartmentController : ControllerBase
             // Merge employees data
             var getAccounts = accountRepository.GetAll();
 
-            if(getAccounts.Status == ActionStatus.ERROR)
+            if(getAccounts.Status == RepositoryStatus.ERROR)
             {
                 throw getAccounts.Exception;
             }
 
             var getJobs = jobRepository.GetAll();
 
-            if(getJobs.Status == ActionStatus.ERROR)
+            if(getJobs.Status == RepositoryStatus.ERROR)
             {
                 throw getJobs.Exception;
             }

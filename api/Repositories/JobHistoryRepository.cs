@@ -21,7 +21,7 @@ public class JobHistoryRepository : GeneralRepository<JobHistory>, IJobHistoryRe
 
             if (!data.Any())
             {
-                repository.Status = ActionStatus.NOT_FOUND;
+                repository.Status = RepositoryStatus.NOT_FOUND;
                 repository.Exception = new Exception("Job history not found.");
 
                 return repository;
@@ -33,7 +33,7 @@ public class JobHistoryRepository : GeneralRepository<JobHistory>, IJobHistoryRe
         }
         catch(Exception ex)
         {
-            repository.Status = ActionStatus.ERROR;
+            repository.Status = RepositoryStatus.ERROR;
             repository.Exception = ex;
 
             return repository;

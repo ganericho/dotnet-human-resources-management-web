@@ -21,7 +21,7 @@ public class DepartmentRepository : GeneralRepository<Department>, IDepartmentRe
 
             if (data is null)
             {
-                repository.Status = ActionStatus.NOT_FOUND;
+                repository.Status = RepositoryStatus.NOT_FOUND;
                 repository.Exception = new Exception("Department not registered.");
 
                 return repository;
@@ -33,7 +33,7 @@ public class DepartmentRepository : GeneralRepository<Department>, IDepartmentRe
         }
         catch(Exception ex)
         {
-            repository.Status = ActionStatus.ERROR;
+            repository.Status = RepositoryStatus.ERROR;
             repository.Exception = ex;
 
             return repository;
@@ -50,7 +50,7 @@ public class DepartmentRepository : GeneralRepository<Department>, IDepartmentRe
 
             if (data is null)
             {
-                repository.Status = ActionStatus.NOT_FOUND;
+                repository.Status = RepositoryStatus.NOT_FOUND;
                 repository.Exception = new Exception("Department not registered.");
 
                 return repository;
@@ -62,7 +62,7 @@ public class DepartmentRepository : GeneralRepository<Department>, IDepartmentRe
         }
         catch (Exception ex)
         {
-            repository.Status = ActionStatus.ERROR;
+            repository.Status = RepositoryStatus.ERROR;
             repository.Exception = ex;
 
             return repository;
